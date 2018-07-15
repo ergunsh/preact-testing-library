@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'preact'
 import axiosMock from 'axios'
 import {render, fireEvent, cleanup, wait} from '../'
 

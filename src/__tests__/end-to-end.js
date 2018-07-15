@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'preact'
 import {render, wait, cleanup} from '../'
 
 afterEach(cleanup)

@@ -1,5 +1,4 @@
-import ReactDOM from 'react-dom'
-import {Simulate} from 'react-dom/test-utils'
+import ReactDOM from 'preact-compat'
 import {getQueriesForElement, prettyDOM} from 'dom-testing-library'
 
 const mountedContainers = new Set()
@@ -46,12 +45,12 @@ function cleanupAtContainer(container) {
 }
 
 // fallback to synthetic events for React events that the DOM doesn't support
-const syntheticEvents = ['change', 'select', 'mouseEnter', 'mouseLeave']
-syntheticEvents.forEach(eventName => {
-  document.addEventListener(eventName.toLowerCase(), e => {
-    Simulate[eventName](e.target, e)
-  })
-})
+// const syntheticEvents = ['change', 'select', 'mouseEnter', 'mouseLeave']
+// syntheticEvents.forEach(eventName => {
+//   document.addEventListener(eventName.toLowerCase(), e => {
+//     Simulate[eventName](e.target, e)
+//   })
+// })
 
 // just re-export everything from dom-testing-library
 export * from 'dom-testing-library'

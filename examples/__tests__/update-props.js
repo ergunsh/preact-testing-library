@@ -2,7 +2,7 @@
 // the basic idea is to simply call `render` again and provide the same container
 // that your first call created for you.
 
-import React from 'react'
+import React from 'preact'
 import {render, cleanup} from 'react-testing-library'
 
 let idCounter = 1

@@ -121,7 +121,7 @@ You may also be interested in installing `jest-dom` so you can use
 
 ```javascript
 // __tests__/fetch.js
-import React from 'react'
+import React from 'preact'
 import {render, fireEvent, cleanup, waitForElement} from 'react-testing-library'
 // this add custom jest matchers from jest-dom
 import 'jest-dom/extend-expect'

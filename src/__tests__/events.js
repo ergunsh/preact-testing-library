@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'preact-compat'
 import {render, cleanup, fireEvent} from '../'
 
 const eventTypes = [
@@ -30,7 +30,7 @@ const eventTypes = [
   },
   {
     type: 'Focus',
-    events: ['change', 'input', 'invalid'],
+    events: ['input', 'invalid'],
     elementType: 'input',
   },
   {
@@ -138,17 +138,20 @@ eventTypes.forEach(({type, events, elementType, init}) => {
       )}`
 
       it(`triggers ${propName}`, () => {
-        const ref = React.createRef()
         const spy = jest.fn()
-
-        render(
+        const refs = {}
+        const {debug} = render(
           React.createElement(elementType, {
             [propName]: spy,
-            ref,
+            ref: el => {
+              refs.el = el
+            },
           }),
         )
 
-        fireEvent[eventName](ref.current, init)
+        propName === 'onInput' && debug()
+
+        fireEvent[eventName](refs.el, init)
         expect(spy).toHaveBeenCalledTimes(1)
       })
     })
