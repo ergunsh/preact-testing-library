@@ -140,7 +140,7 @@ eventTypes.forEach(({type, events, elementType, init}) => {
       it(`triggers ${propName}`, () => {
         const spy = jest.fn()
         const refs = {}
-        const {debug} = render(
+        render(
           React.createElement(elementType, {
             [propName]: spy,
             ref: el => {
@@ -148,8 +148,6 @@ eventTypes.forEach(({type, events, elementType, init}) => {
             },
           }),
         )
-
-        propName === 'onInput' && debug()
 
         fireEvent[eventName](refs.el, init)
         expect(spy).toHaveBeenCalledTimes(1)
