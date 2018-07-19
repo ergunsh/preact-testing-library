@@ -1,9 +1,9 @@
-import ReactDOM from 'preact-compat'
+import preact from 'preact'
 import {getQueriesForElement, prettyDOM} from 'dom-testing-library'
 
 const mountedContainers = new Set()
 
-function render(ui, {container, baseElement = container} = {}) {
+function render(ui, {container, baseElement = container, domNode} = {}) {
   if (!container) {
     baseElement = document.documentElement
     container = document.body.appendChild(document.createElement('div'))
@@ -14,15 +14,15 @@ function render(ui, {container, baseElement = container} = {}) {
   // they're passing us a custom container or not.
   mountedContainers.add(container)
 
-  ReactDOM.render(ui, container)
+  const newDomNode = preact.render(ui, container, domNode)
   return {
     container,
     baseElement,
     // eslint-disable-next-line no-console
     debug: (el = baseElement) => console.log(prettyDOM(el)),
-    unmount: () => ReactDOM.unmountComponentAtNode(container),
+    unmount: () => preact.render(null, container, newDomNode),
     rerender: rerenderUi => {
-      render(rerenderUi, {container, baseElement})
+      render(rerenderUi, {container, baseElement, domNode: newDomNode})
       // Intentionally do not return anything to avoid unnecessarily complicating the API.
       // folks can use all the same utilities we return in the first place that are bound to the container
     },
@@ -40,17 +40,11 @@ function cleanupAtContainer(container) {
   if (container.parentNode === document.body) {
     document.body.removeChild(container)
   }
-  ReactDOM.unmountComponentAtNode(container)
+  Array.prototype.forEach.call(container.children, child => {
+    preact.render(null, container, child)
+  })
   mountedContainers.delete(container)
 }
-
-// fallback to synthetic events for React events that the DOM doesn't support
-// const syntheticEvents = ['change', 'select', 'mouseEnter', 'mouseLeave']
-// syntheticEvents.forEach(eventName => {
-//   document.addEventListener(eventName.toLowerCase(), e => {
-//     Simulate[eventName](e.target, e)
-//   })
-// })
 
 // just re-export everything from dom-testing-library
 export * from 'dom-testing-library'
